@@ -1,9 +1,7 @@
 import argparse
 import os
-import shutil
 import logging
 import numpy as np
-from tqdm import tqdm
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from src.utils.common import read_yaml, create_directories, get_df
 from src.utils.featurize import save_matrix
