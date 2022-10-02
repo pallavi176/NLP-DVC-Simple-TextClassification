@@ -4,10 +4,9 @@ import shutil
 import logging
 import numpy as np
 from tqdm import tqdm
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from src.utils.common import read_yaml, create_directories, get_df
 from src.utils.featurize import save_matrix
-
 
 STAGE = "Two" 
 
@@ -17,7 +16,6 @@ logging.basicConfig(
     format="[%(asctime)s: %(levelname)s: %(module)s]: %(message)s",
     filemode="a"
     )
-
 
 def main(config_path, params_path):
     ## read config files
@@ -32,8 +30,8 @@ def main(config_path, params_path):
     featurized_data_dir_path = os.path.join(artifacts["ARTIFACTS_DIR"], artifacts["FEATURIZED_DATA"])
     create_directories([featurized_data_dir_path])
 
-    featurized_train_data_path = os.path.join(prepared_data_dir_path, artifacts["FEATURIZED_OUT_TRAIN"])
-    featurized_test_data_path = os.path.join(prepared_data_dir_path, artifacts["FEATURIZED_OUT_TEST"])
+    featurized_train_data_path = os.path.join(featurized_data_dir_path, artifacts["FEATURIZED_OUT_TRAIN"])
+    featurized_test_data_path = os.path.join(featurized_data_dir_path, artifacts["FEATURIZED_OUT_TEST"])
 
     max_features = params["featurize"]["max_features"]
     ngrams = params["featurize"]["ngrams"]
@@ -54,7 +52,7 @@ def main(config_path, params_path):
     bag_of_words.fit(train_words)
     train_words_binary_matrix = bag_of_words.transform(train_words)
 
-    tfidf = TfidfVectorizer(smooth_idf=False) # smooth_idf: add 1 to denominator in idf
+    tfidf = TfidfTransformer(smooth_idf=False) # smooth_idf: add 1 to denominator in idf
     tfidf.fit(train_words_binary_matrix)
     train_words_binary_matrix = tfidf.transform(train_words_binary_matrix)
 
