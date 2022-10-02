@@ -1,5 +1,5 @@
-# dvc-NLP-simple-usecase
-DVC NLP project
+# NLP-DVC-Simple-TextClassification
+DVC NLP Project
 
 ## Reference repository:
 * [official reference repo](https://github.com/iterative/example-get-started)
