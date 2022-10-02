@@ -6,6 +6,8 @@ DVC NLP project
 
 * [DVC STUDIO](https://studio.iterative.ai/)
 
+*[MY VIEW](https://studio.iterative.ai/user/pallavi176/projects/NLP-DVC-Simple-TextClassification-r1ztma07ou)
+
 
 ## STEPS -
 
