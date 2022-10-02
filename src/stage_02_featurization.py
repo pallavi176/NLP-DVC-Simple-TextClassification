@@ -1,11 +1,12 @@
 import argparse
 import os
 import shutil
+import logging
 import numpy as np
 from tqdm import tqdm
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-import logging
 from src.utils.common import read_yaml, create_directories, get_df
+from src.utils.featurize import save_matrix
 
 
 STAGE = "Two" 
@@ -42,6 +43,22 @@ def main(config_path, params_path):
 
     # Get the training words
     train_words = np.array(df_train.text.str.lower().values.astype("U"))
+
+    # Generate the Feature Matrix
+    bag_of_words = CountVectorizer(
+        stop_words="english",
+        max_features=max_features,
+        ngram_range=(1, ngrams)
+    )
+
+    bag_of_words.fit(train_words)
+    train_words_binary_matrix = bag_of_words.transform(train_words)
+
+    tfidf = TfidfVectorizer(smooth_idf=False) # smooth_idf: add 1 to denominator in idf
+    tfidf.fit(train_words_binary_matrix)
+    train_words_binary_matrix = tfidf.transform(train_words_binary_matrix)
+
+    save_matrix(df_train, train_words_binary_matrix, featurized_train_data_path)
 
 if __name__ == '__main__':
     args = argparse.ArgumentParser()
