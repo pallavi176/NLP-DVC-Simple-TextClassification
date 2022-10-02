@@ -36,11 +36,11 @@ def main(config_path, params_path):
     max_features = params["featurize"]["max_features"]
     ngrams = params["featurize"]["ngrams"]
 
-    # Read the data
+    # Read the training data
     df_train = get_df(train_data_path)
 
     # Get the training words
-    train_words = np.array(df_train.text.str.lower().values.astype("U"))
+    train_words = np.array(df_train.text.str.lower().values.astype("U"))  ## << U1000
 
     # Generate the Feature Matrix
     bag_of_words = CountVectorizer(
@@ -57,6 +57,17 @@ def main(config_path, params_path):
     train_words_binary_matrix = tfidf.transform(train_words_binary_matrix)
 
     save_matrix(df_train, train_words_binary_matrix, featurized_train_data_path)
+
+    # Read the test data
+    df_test = get_df(test_data_path)
+
+    # Get the test words
+    test_words = np.array(df_test.text.str.lower().values.astype("U"))
+    test_words_binary_matrix = bag_of_words.transform(test_words)
+    test_words_binary_matrix = tfidf.transform(test_words_binary_matrix)
+
+    save_matrix(df_test, test_words_binary_matrix, featurized_test_data_path)
+
 
 if __name__ == '__main__':
     args = argparse.ArgumentParser()
